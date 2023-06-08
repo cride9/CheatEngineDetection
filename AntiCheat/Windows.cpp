@@ -15,7 +15,7 @@ int __stdcall DllMain(HINSTANCE hinstDLL, unsigned long fdwReason, void* lpReser
 	/* At successfull dll injection */
 	if (fdwReason == DLL_PROCESS_ATTACH) {
 
-		ShowMessageBox("Injected", "AntiCheat.dll was successfully injected");
+		//ShowMessageBox("Injected", "AntiCheat.dll was successfully injected");
 
 		/* Disable other reason calls */
 		DisableThreadLibraryCalls(hinstDLL);
@@ -49,12 +49,12 @@ void DLLDetection() {
 
 		/* FreeLibraryAndExitThread closes the handle that is used by the dlls ("uninject") */
 		if (cheatEngineSpeedHackHooks) {
-			ShowMessageBox("Detection!", std::format("speedhack-x86_64.dll was detected at memory location: {}", (DWORD64)&cheatEngineSpeedHackHooks).c_str());
+			//ShowMessageBox("Detection!", std::format("speedhack-x86_64.dll was detected at memory location: {}", (DWORD64)&cheatEngineSpeedHackHooks).c_str());
 			FreeLibrary(cheatEngineSpeedHackHooks);
 		}
 
 		if (cheatEngineWindowsHooks) {
-			ShowMessageBox("Detection!", std::format("winhook-x86_64.dll was detected at memory location: {}", (DWORD64)&cheatEngineWindowsHooks).c_str());
+			//ShowMessageBox("Detection!", std::format("winhook-x86_64.dll was detected at memory location: {}", (DWORD64)&cheatEngineWindowsHooks).c_str());
 			FreeLibrary(cheatEngineWindowsHooks);
 		}
 
@@ -94,7 +94,7 @@ void SpeedHackDetection() {
 					FalseAlarms++;
 					if (FalseAlarms > 5) {
 						detectionChances--;
-						ShowMessageBox("Unusual speed detected!!", std::format("Game was sped up by {}%\nDetection chances left: {}", difference / 16.f, detectionChances).c_str());
+						//ShowMessageBox("Unusual speed detected!!", std::format("Game was sped up by {}%\nDetection chances left: {}", difference / 16.f, detectionChances).c_str());
 					}
 				}
 				else 

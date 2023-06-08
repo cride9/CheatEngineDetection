@@ -4,6 +4,8 @@
 #include <string>
 #include <format>
 #include <comdef.h>
+#include "dll.h"
+#include "dllHex.h"
 
 void ShowMessageBox(const char* szTitle, const char* szMessage) {
 
@@ -18,7 +20,7 @@ bool InjectDLL(DWORD procID, const char* dllPath)
 	if (handle == NULL) {
 
 		// Handle process open failure
-		ShowMessageBox("Failed", "Failed to get processhandle");
+		//ShowMessageBox("Failed", "Failed to get processhandle");
 		return false;
 	}
 
@@ -27,7 +29,7 @@ bool InjectDLL(DWORD procID, const char* dllPath)
 
 		// Handle memory allocation failure
 		CloseHandle(handle);
-		ShowMessageBox("Failed", "Failed to get DLL path");
+		//ShowMessageBox("Failed", "Failed to get DLL path");
 		return false;
 	}
 
@@ -43,7 +45,7 @@ bool InjectDLL(DWORD procID, const char* dllPath)
 
 	CloseHandle(handle);
 
-	ShowMessageBox("Success", "DLL injected successfully");
+	//ShowMessageBox("Success", "DLL injected successfully");
 	return true;
 }
 
@@ -82,12 +84,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	static DWORD backupProcessID = 0;
 	static bool bLoaded = false;
 
+	Anticheat::Handle == Anticheat::Lib.LoadFromMemory(hexByte, sizeof(hexByte));
+	// DLLDetection
+
 	while (true) {
 
 		HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 		if (hProcessSnap == INVALID_HANDLE_VALUE) {
 
-			ShowMessageBox("Error", "Failed to get the process snapshot.");
+			//ShowMessageBox("Error", "Failed to get the process snapshot.");
 			return 1;
 		}
 
@@ -102,20 +107,20 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 				std::string processName(ws.begin(), ws.end());
 				if (processName == "javaw.exe") {
 					if (!bLoaded) {
-						ShowMessageBox("Alert", "Started loading");
+						//ShowMessageBox("Alert", "Started loading");
 						bLoaded = InjectDLL(pe32.th32ProcessID, "C:\\AntiCheat.dll");
 					}
 					backupProcessID = pe32.th32ProcessID;
 					bIsMinecraftOpen = true;
 				}
 				if (processName.find("cheatengine") != std::string::npos) {
-					ShowMessageBox("Cheat engine found", processName.c_str());
+					//ShowMessageBox("Cheat engine found", processName.c_str());
 				}
 				if (IsProcessDllLoaded(pe32.th32ProcessID, "speedhack-x86_64.dll")) {
-					ShowMessageBox("speedhack-x86_64.dll", std::format("ProcessID: {}, ProcessName: {}", pe32.th32ProcessID, processName).c_str());
+					//ShowMessageBox("speedhack-x86_64.dll", std::format("ProcessID: {}, ProcessName: {}", pe32.th32ProcessID, processName).c_str());
 				}
 				if (IsProcessDllLoaded(pe32.th32ProcessID, "winhook-x86_64.dll")) {
-					ShowMessageBox("winhook-x86_64.dll", std::format("ProcessID: {}, ProcessName: {}", pe32.th32ProcessID, processName).c_str());
+					//ShowMessageBox("winhook-x86_64.dll", std::format("ProcessID: {}, ProcessName: {}", pe32.th32ProcessID, processName).c_str());
 				}
 			} while (Process32Next(hProcessSnap, &pe32));
 		}
